@@ -98,9 +98,9 @@ u32 Cycle;
 u32 LastPoll;
 PinFunction PinCallback[PIN_COUNT];
 
-COMPILE_ASSERT(sizeof(Data.SREG) == 1);
-COMPILE_ASSERT(((u8 *)&Data.SP) - Data._Bytes == 0x5d);
-COMPILE_ASSERT(((u8 *)&Data.SREG) - Data._Bytes == 0x5f);
+//COMPILE_ASSERT(sizeof(Data.SREG) == 1);
+//COMPILE_ASSERT(((u8 *)&Data.SP) - Data._Bytes == 0x5d);
+//COMPILE_ASSERT(((u8 *)&Data.SREG) - Data._Bytes == 0x5f);
 
 static u8 read(u16 addr)
 {
@@ -281,7 +281,7 @@ static void do_BRBS(u16 instr)
 static void do_BREAK(u16 instr)
 {
     trace(__FUNCTION__);
-    unimplemented(__FUNCTION__);
+    //unimplemented(__FUNCTION__);
     Cycle++;
 }
 
@@ -418,22 +418,36 @@ static void do_DEC(u16 instr)
     Cycle++;
 }
 
+/*
+    check in the target instructions set.
+*/
 static void do_DES(u16 instr)
 {
+    //for data encryption
+    /*
+        no need for the instruction . target doesn't support this instruction set
+    */
     trace(__FUNCTION__);
-    unimplemented(__FUNCTION__);
+    //unimplemented(__FUNCTION__);
 }
 
 static void do_EICALL(u16 instr)
-{
+{   // -------10001----
+ /*
+        no need for the instruction . target doesn't support this instruction set
+ */
     trace(__FUNCTION__);
-    unimplemented(__FUNCTION__);
+    
+    //unimplemented(__FUNCTION__);
 }
 
 static void do_EIJMP(u16 instr)
 {
     trace(__FUNCTION__);
-    unimplemented(__FUNCTION__);
+    //unimplemented(__FUNCTION__);
+    /*
+        no need for the instruction . target doesn't support this instruction set
+ */
 }
 
 static void do_ELPM_1(u16 instr)
@@ -445,14 +459,20 @@ static void do_ELPM_1(u16 instr)
 
 static void do_ELPM_2(u16 instr)
 {
+    /*
+        no need for the instruction . target doesn't support this instruction set
+    */
     trace(__FUNCTION__);
-    unimplemented(__FUNCTION__);
+    //unimplemented(__FUNCTION__);
 }
 
 static void do_ELPM_3(u16 instr)
 {
+    /*
+        no need for the instruction . target doesn't support this instruction set
+    */
     trace(__FUNCTION__);
-    unimplemented(__FUNCTION__);
+    //unimplemented(__FUNCTION__);
 }
 
 static void do_EOR(u16 instr)
@@ -470,21 +490,51 @@ static void do_EOR(u16 instr)
 }
 
 static void do_FMUL(u16 instr)
-{
+{   
     trace(__FUNCTION__);
-    unimplemented(__FUNCTION__);
+    //------ddd1rrr
+    u16 r = (instr& 0x7);
+    u16 d = ((instr>>4) & 0x7);
+    u16 result = Data.Reg[d] * Data.Reg[r];
+    Data.Reg[1] = ((result>>8)&0xff);
+    Data.Reg[0] = (result& 0x00ff);
+    Data.SREG.C = (result>>16);
+    Data.SREG.Z = (result == 0);
+    Cycle = Cycle+2;
+    //trace(__FUNCTION__);
+    //unimplemented(__FUNCTION__);
 }
 
 static void do_FMULS(u16 instr)
 {
     trace(__FUNCTION__);
-    unimplemented(__FUNCTION__);
+    //------ddd0rrr
+    u16 r = (instr& 0x7);
+    u16 d = ((instr>>4) & 0x7);
+    u16 result = Data.Reg[d] * Data.Reg[r];
+    Data.Reg[1] = ((result>>8)&0xff);
+    Data.Reg[0] = (result& 0x00ff);
+    Data.SREG.C = (result>>16);
+    Data.SREG.Z = (result == 0);
+    Cycle = Cycle+2;
+    //trace(__FUNCTION__);
+    //unimplemented(__FUNCTION__);
 }
 
 static void do_FMULSU(u16 instr)
 {
     trace(__FUNCTION__);
-    unimplemented(__FUNCTION__);
+    //-----1ddd1rrr
+    u16 r = (instr& 0x7);
+    u16 d = ((instr>>4) & 0x7);
+    u16 result = Data.Reg[d] * Data.Reg[r];
+    Data.Reg[1] = ((result>>8)&0xff);
+    Data.Reg[0] = (result& 0x00ff);
+    Data.SREG.C = (result>>16);
+    Data.SREG.Z = (result == 0);
+    Cycle = Cycle+2;
+    //trace(__FUNCTION__);
+    //unimplemented(__FUNCTION__);
 }
 
 static void do_ICALL(u16 instr)
@@ -1001,21 +1051,27 @@ static void do_SBRS(u16 instr)
 static void do_SLEEP(u16 instr)
 {
     trace(__FUNCTION__);
-    unimplemented(__FUNCTION__);
+    //unimplemented(__FUNCTION__);
     Cycle++;
 }
 
 static void do_SPM2_1(u16 instr)
 {
+    /*
+        no need for the emulator
+    */
     trace(__FUNCTION__);
-    unimplemented(__FUNCTION__);
+    //unimplemented(__FUNCTION__);
     // unknown cycles
 }
 
 static void do_SPM2_2(u16 instr)
 {
+    /*
+        no need for the emulator
+    */
     trace(__FUNCTION__);
-    unimplemented(__FUNCTION__);
+    //unimplemented(__FUNCTION__);
     // unknown cycles
 }
 
@@ -1157,7 +1213,7 @@ static void do_SWAP(u16 instr)
 static void do_WDR(u16 instr)
 {
     trace(__FUNCTION__);
-    unimplemented(__FUNCTION__);
+    //unimplemented(__FUNCTION__);
     Cycle++;
 }
 
